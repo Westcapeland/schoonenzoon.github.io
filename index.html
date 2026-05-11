@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schoon en Zoon</title>
+
+<style>
+:root {
+    --dark-blue: #24394a;
+    --medium-blue: #2f6f96;
+    --light-blue: #e8f3f8;
+    --accent: #f2b84b;
+    --white: #ffffff;
+    --text: #24313a;
+    --muted: #66737d;
+    --border: #d9e2e7;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    background: #f6f7f8;
+    color: var(--text);
+}
+
+header {
+    background: linear-gradient(135deg, var(--dark-blue), var(--medium-blue));
+    color: white;
+    padding: 26px 18px 34px;
+    text-align: center;
+    border-bottom: 5px solid var(--accent);
+}
+
+.logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.logo-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: white;
+    color: var(--medium-blue);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+    font-weight: bold;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 30px;
+    letter-spacing: 0.4px;
+}
+
+header p {
+    margin: 8px auto 0;
+    max-width: 520px;
+    font-size: 15px;
+    opacity: 0.95;
+    line-height: 1.4;
+}
+
+.container {
+    max-width: 900px;
+    margin: -18px auto 80px;
+    padding: 0 16px 24px;
+}
+
+.card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 14px rgba(36,49,58,0.08);
+}
+
+.card h2 {
+    margin-top: 0;
+    color: var(--dark-blue);
+    font-size: 21px;
+}
+
+.card p {
+    line-height: 1.55;
+    color: #35434d;
+}
+
+.service-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 0;
+    margin: 12px 0 0;
+    list-style: none;
+}
+
+.service-list li {
+    background: var(--light-blue);
+    border-left: 4px solid var(--medium-blue);
+    border-radius: 9px;
+    padding: 12px;
+    font-size: 14px;
+}
+
+.info-strip {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.info-box {
+    background: #fbfbfb;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 14px;
+}
+
+.info-box strong {
+    display: block;
+    margin-bottom: 4px;
+    color: var(--dark-blue);
+}
+
+.chat-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #1f7fc1;
+    color: white;
+    padding: 13px 16px;
+    border-radius: 28px;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.24);
+    border: 2px solid white;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 20;
+}
+
+.chat-button span {
+    font-size: 20px;
+}
+
+.chat-page {
+    display: none;
+    min-height: 100vh;
+    background: #dfe7ec;
+    padding: 18px;
+}
+
+.chat-window {
+    width: 100%;
+    max-width: 430px;
+    height: calc(100vh - 36px);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    background: #f4f6f7;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.25);
+    border: 1px solid rgba(0,0,0,0.12);
+}
+
+.chat-header {
+    background: var(--dark-blue);
+    color: white;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.chat-header-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #22313c;
+    font-weight: bold;
+}
+
+.chat-header-title {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.chat-header-subtitle {
+    font-size: 12px;
+    opacity: 0.85;
+    margin-top: 2px;
+}
+
+.chat-box {
+    flex: 1;
+    padding: 14px;
+    overflow-y: auto;
+    background: linear-gradient(#edf2f5, #e4ebef);
+}
+
+.message {
+    margin: 7px 0;
+    white-space: pre-wrap;
+    line-height: 1.45;
+    font-size: 14px;
+    max-width: 86%;
+    padding: 10px 12px;
+    border-radius: 14px;
+    clear: both;
+}
+
+.bot {
+    background: white;
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-bottom-left-radius: 4px;
+    float: left;
+}
+
+.user {
+    background: #1f7fc1;
+    color: white;
+    border-bottom-right-radius: 4px;
+    float: right;
+    text-align: left;
+}
+
+.system-end {
+    background: transparent;
+    color: #7a858c;
+    text-align: center;
+    border: none;
+    max-width: 100%;
+    float: none;
+    margin: 14px auto;
+    font-style: italic;
+}
+
+.options {
+    padding: 12px;
+    background: white;
+    border-top: 1px solid var(--border);
+}
+
+button {
+    padding: 11px 13px;
+    margin: 5px 4px;
+    border: none;
+    background: #1f7fc1;
+    color: white;
+    border-radius: 9px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #176a9f;
+}
+
+.secondary-button {
+    background: #6d7880;
+}
+
+.secondary-button:hover {
+    background: #566169;
+}
+
+input {
+    padding: 12px;
+    width: 100%;
+    border: 1px solid #b8c6cf;
+    border-radius: 9px;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+input:focus {
+    outline: 2px solid rgba(31,127,193,0.25);
+    border-color: #1f7fc1;
+}
+
+@media (max-width: 600px) {
+    header {
+        padding-top: 22px;
+    }
+
+    header h1 {
+        font-size: 26px;
+    }
+
+    .container {
+        margin-top: -14px;
+    }
+
+    .service-list,
+    .info-strip {
+        grid-template-columns: 1fr;
+    }
+
+    .chat-page {
+        padding: 0;
+    }
+
+    .chat-window {
+        max-width: none;
+        height: 100vh;
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+    }
+
+    .chat-button {
+        right: 14px;
+        bottom: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo-row">
+        <div class="logo-icon">S</div>
+        <h1>Schoon en Zoon</h1>
+    </div>
+    <p>Betrouwbare schoonmaakdiensten voor woningen, kantoren en bedrijfspanden.</p>
+</header>
+
+<main class="container" id="homePage">
+    <section class="card">
+        <h2>Over ons</h2>
+        <p>
+            Schoon en Zoon is een lokaal familiebedrijf met jarenlange ervaring in professionele schoonmaakdiensten.
+            Wij werken netjes, discreet en volgens duidelijke afspraken. Of het nu gaat om periodiek onderhoud of een eenmalige grote schoonmaak: wij zorgen dat alles weer fris en verzorgd is.
+        </p>
+    </section>
+
+    <section class="card">
+        <h2>Onze diensten</h2>
+        <ul class="service-list">
+            <li>Kantoor schoonmaak</li>
+            <li>Glasbewassing</li>
+            <li>Opleveringsschoonmaak</li>
+            <li>Periodiek onderhoud</li>
+        </ul>
+    </section>
+
+    <section class="card">
+        <h2>Contact & bereikbaarheid</h2>
+        <div class="info-strip">
+            <div class="info-box">
+                <strong>Openingstijden</strong>
+                Ma t/m vr: 08:00 - 17:30
+            </div>
+            <div class="info-box">
+                <strong>Werkgebied</strong>
+                Regio en omgeving
+            </div>
+            <div class="info-box">
+                <strong>Service contact</strong>
+                Gebruik de blauwe knop rechtsonder
+            </div>
+        </div>
+    </section>
+</main>
+
+<div class="chat-button" onclick="openChat()"><span>💬</span> Service contact</div>
+
+<section class="chat-page" id="chatPage">
+    <div class="chat-window">
+        <div class="chat-header">
+            <div class="chat-header-icon">S</div>
+            <div>
+                <div class="chat-header-title">Schoon en Zoon Service</div>
+                <div class="chat-header-subtitle">Gemiddelde reactietijd: enkele seconden</div>
+            </div>
+        </div>
+        <div class="chat-box" id="chatBox"></div>
+        <div class="options" id="options"></div>
+    </div>
+</section>
+
+<script>
+let botIsTyping = false;
+
+function delay(ms) {
+    return new Promise(res => setTimeout(res, ms));
+}
+
+async function typeMessage(text, sender = "bot") {
+    botIsTyping = true;
+    const box = document.getElementById("chatBox");
+    const msg = document.createElement("div");
+    msg.className = "message " + sender;
+    box.appendChild(msg);
+
+    for (let i = 0; i < text.length; i++) {
+        msg.textContent += text[i];
+        await delay(14);
+        box.scrollTop = box.scrollHeight;
+    }
+
+    botIsTyping = false;
+}
+
+function addMessage(text, sender = "bot") {
+    const box = document.getElementById("chatBox");
+    const msg = document.createElement("div");
+    msg.className = "message " + sender;
+    msg.textContent = text;
+    box.appendChild(msg);
+    box.scrollTop = box.scrollHeight;
+}
+
+function addSystemMessage(text) {
+    const box = document.getElementById("chatBox");
+    const msg = document.createElement("div");
+    msg.className = "message system-end";
+    msg.textContent = text;
+    box.appendChild(msg);
+    box.scrollTop = box.scrollHeight;
+}
+
+function clearOptions() {
+    document.getElementById("options").innerHTML = "";
+}
+
+function addButton(text, action, extraClass = "") {
+    const btn = document.createElement("button");
+    btn.textContent = text;
+    if (extraClass) btn.className = extraClass;
+    btn.onclick = () => {
+        if (!botIsTyping) action();
+    };
+    document.getElementById("options").appendChild(btn);
+}
+
+function openChat() {
+    document.getElementById("homePage").style.display = "none";
+    document.querySelector("header").style.display = "none";
+    document.querySelector(".chat-button").style.display = "none";
+    document.getElementById("chatPage").style.display = "flex";
+    resetChat();
+}
+
+async function startChat() {
+    clearOptions();
+    await typeMessage('Welkom bij schoonmaakbedrijf "Schoon en Zoon". Waar kan ik u mee van dienst zijn?');
+    await delay(300);
+
+    addButton("Algemene vraag", generalQuestion);
+    addButton("Inloggen", loginStart);
+}
+
+async function generalQuestion() {
+    clearOptions();
+    addMessage("Algemene vraag", "user");
+    await delay(300);
+    await typeMessage("Oke, stel uw vraag en ik probeer zo goed mogelijk te helpen.");
+
+    clearOptions();
+    const input = document.createElement("input");
+    input.placeholder = "Typ uw vraag...";
+
+    input.onkeydown = async function(e) {
+        if (e.key === "Enter" && input.value.trim() !== "" && !botIsTyping) {
+            addMessage(input.value, "user");
+            input.value = "";
+            await delay(300);
+            await typeMessage("Sorry, ik snap uw vraag niet.");
+        }
+    };
+
+    document.getElementById("options").appendChild(input);
+    addButton("Opnieuw beginnen", resetChat, "secondary-button");
+    input.focus();
+}
+
+async function loginStart() {
+    clearOptions();
+    addMessage("Inloggen", "user");
+    await delay(300);
+    await typeMessage("Voer de laatste 4 cijfers van uw klantnummer in.");
+
+    clearOptions();
+    ["1234", "2983", "6218", "9362", "7302"].forEach(code => {
+        addButton(code, () => checkCustomer(code));
+    });
+}
+
+async function checkCustomer(code) {
+    clearOptions();
+    addMessage(code, "user");
+    await delay(300);
+
+    if (code === "6218") {
+        await typeMessage("Welkom. Voer uw 4-cijferige pincode in.");
+
+        clearOptions();
+        const input = document.createElement("input");
+        input.placeholder = "Pincode...";
+        input.type = "password";
+        input.inputMode = "numeric";
+        input.maxLength = 4;
+
+        input.onkeydown = function(e) {
+            if (e.key === "Enter" && input.value.trim() !== "" && !botIsTyping) {
+                checkPin(input.value);
+            }
+        };
+
+        document.getElementById("options").appendChild(input);
+        input.focus();
+
+    } else {
+        await typeMessage("Welkom. Uw dashboard wordt geladen...");
+        await delay(500);
+        await typeMessage("Geen recente activiteiten gevonden.");
+
+        clearOptions();
+        addButton("Nieuwe chat starten", resetChat, "secondary-button");
+    }
+}
+
+async function checkPin(pin) {
+    clearOptions();
+    addMessage("****", "user");
+    await delay(300);
+
+    if (pin === "9874") {
+        await typeMessage("Welkom! Er is één bericht in uw inbox.");
+        await delay(300);
+
+        await typeMessage(`Ha,
+
+Ik weet dat alles snel gaat, maar volgens mij zitten we op de goede weg. Het virus slaat goed aan en alles lijkt naar behoren te werken. Alleen wij kunnen het uitschakelen wanneer dat nodig is.
+
+Ook de eerste testen om het virus te activeren zijn geslaagd. We gaan daarom verder met de verspreiding.
+
+Project MKULTRA.`);
+
+        addSystemMessage("— einde chat —");
+
+        clearOptions();
+        addButton("Nieuwe chat starten", resetChat, "secondary-button");
+
+    } else {
+        await typeMessage("Onjuiste pincode.");
+        clearOptions();
+        addButton("Opnieuw proberen", loginStart, "secondary-button");
+    }
+}
+
+function resetChat() {
+    document.getElementById("chatBox").innerHTML = "";
+    startChat();
+}
+</script>
+
+</body>
+</html>

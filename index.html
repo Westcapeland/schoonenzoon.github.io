@@ -503,7 +503,7 @@ async function loginStart() {
     await typeMessage("Voer de laatste 4 cijfers van uw klantnummer in.");
 
     clearOptions();
-    ["1234", "2983", "6218", "9362", "7302"].forEach(code => {
+    ["1234", "2983", "6283", "9362", "7302"].forEach(code => {
         addButton(code, () => checkCustomer(code));
     });
 }
@@ -513,7 +513,7 @@ async function checkCustomer(code) {
     addMessage(code, "user");
     await delay(300);
 
-    if (code === "6218") {
+    if (code === "6283") {
         await typeMessage("Welkom. Voer uw 4-cijferige pincode in.");
 
         clearOptions();

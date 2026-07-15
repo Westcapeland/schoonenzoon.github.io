@@ -2,7 +2,8 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#24394a">
 <title>Schoon en Zoon</title>
 
 <style>
@@ -15,10 +16,16 @@
     --text: #24313a;
     --muted: #66737d;
     --border: #d9e2e7;
+    --chat-blue: #1f7fc1;
+    --spider-black: #070707;
 }
 
 * {
     box-sizing: border-box;
+}
+
+html, body {
+    min-height: 100%;
 }
 
 body {
@@ -28,10 +35,15 @@ body {
     color: var(--text);
 }
 
+button,
+input {
+    font: inherit;
+}
+
 header {
     background: linear-gradient(135deg, var(--dark-blue), var(--medium-blue));
     color: white;
-    padding: 26px 18px 34px;
+    padding: 26px 18px 38px;
     text-align: center;
     border-bottom: 5px solid var(--accent);
 }
@@ -44,18 +56,20 @@ header {
     margin-bottom: 10px;
 }
 
-.logo-icon {
-    width: 48px;
-    height: 48px;
+.logo-mark {
+    width: 54px;
+    height: 54px;
+    flex: 0 0 54px;
     border-radius: 50%;
     background: white;
-    color: var(--medium-blue);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 25px;
-    font-weight: bold;
+    display: grid;
+    place-items: center;
     box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+}
+
+.logo-mark svg {
+    width: 35px;
+    height: 35px;
 }
 
 header h1 {
@@ -66,15 +80,15 @@ header h1 {
 
 header p {
     margin: 8px auto 0;
-    max-width: 520px;
+    max-width: 560px;
     font-size: 15px;
-    opacity: 0.95;
-    line-height: 1.4;
+    opacity: 0.96;
+    line-height: 1.45;
 }
 
 .container {
     max-width: 900px;
-    margin: -18px auto 80px;
+    margin: -20px auto 90px;
     padding: 0 16px 24px;
 }
 
@@ -88,14 +102,41 @@ header p {
 }
 
 .card h2 {
-    margin-top: 0;
+    margin: 0 0 10px;
     color: var(--dark-blue);
     font-size: 21px;
 }
 
 .card p {
-    line-height: 1.55;
+    line-height: 1.6;
     color: #35434d;
+    margin: 0;
+}
+
+.trust-row {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.trust-item {
+    background: #fbfbfb;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    padding: 13px 10px;
+    text-align: center;
+}
+
+.trust-item strong {
+    display: block;
+    color: var(--dark-blue);
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+.trust-item span {
+    font-size: 12px;
+    color: var(--muted);
 }
 
 .service-list {
@@ -139,7 +180,7 @@ header p {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: #1f7fc1;
+    background: var(--chat-blue);
     color: white;
     padding: 13px 16px;
     border-radius: 28px;
@@ -159,7 +200,7 @@ header p {
 
 .chat-page {
     display: none;
-    min-height: 50vh;
+    min-height: 100vh;
     background: #dfe7ec;
     padding: 18px;
 }
@@ -167,7 +208,7 @@ header p {
 .chat-window {
     width: 100%;
     max-width: 430px;
-    height: calc(50vh - 20px);
+    height: calc(100vh - 36px);
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -181,22 +222,54 @@ header p {
 .chat-header {
     background: var(--dark-blue);
     color: white;
-    padding: 14px 16px;
+    padding: 13px 14px;
     display: flex;
     align-items: center;
     gap: 10px;
+    transition:
+        background-color 0.55s ease,
+        opacity 0.35s ease,
+        transform 0.35s ease;
+}
+
+.chat-header.header-switching {
+    opacity: 0.12;
+    transform: translateY(-2px);
+}
+
+.chat-header.spider-mode {
+    background: #050505;
 }
 
 .chat-header-icon {
-    width: 36px;
-    height: 36px;
+    width: 39px;
+    height: 39px;
+    flex: 0 0 39px;
     border-radius: 50%;
-    background: var(--accent);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #22313c;
-    font-weight: bold;
+    background: white;
+    display: grid;
+    place-items: center;
+    transition:
+        width 0.35s ease,
+        flex-basis 0.35s ease,
+        opacity 0.25s ease,
+        margin 0.35s ease;
+}
+
+.chat-header.spider-mode .chat-header-icon {
+    width: 0;
+    flex-basis: 0;
+    opacity: 0;
+    margin: 0 -5px 0 0;
+}
+
+.chat-header-icon svg {
+    width: 27px;
+    height: 27px;
+}
+
+.chat-header-copy {
+    min-width: 0;
 }
 
 .chat-header-title {
@@ -206,19 +279,29 @@ header p {
 
 .chat-header-subtitle {
     font-size: 12px;
-    opacity: 0.85;
+    opacity: 0.86;
     margin-top: 2px;
 }
 
 .chat-box {
     flex: 1;
+    transition: filter 0.45s ease;
     padding: 14px;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     background: linear-gradient(#edf2f5, #e4ebef);
 }
 
+.agent-label {
+    clear: both;
+    float: left;
+    margin: 3px 0 2px 3px;
+    color: #697780;
+    font-size: 11px;
+}
+
 .message {
-    margin: 7px 0;
+    margin: 5px 0 8px;
     white-space: pre-wrap;
     line-height: 1.45;
     font-size: 14px;
@@ -237,13 +320,14 @@ header p {
 }
 
 .user {
-    background: #1f7fc1;
+    background: var(--chat-blue);
     color: white;
     border-bottom-right-radius: 4px;
     float: right;
     text-align: left;
 }
 
+.system-message,
 .system-end {
     background: transparent;
     color: #7a858c;
@@ -251,12 +335,18 @@ header p {
     border: none;
     max-width: 100%;
     float: none;
-    margin: 14px auto;
+    margin: 12px auto;
     font-style: italic;
+    font-size: 12px;
+}
+
+.chat-box.transition-dim {
+    filter: brightness(0.45);
 }
 
 .options {
     padding: 12px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
     background: white;
     border-top: 1px solid var(--border);
 }
@@ -265,7 +355,7 @@ button {
     padding: 11px 13px;
     margin: 5px 4px;
     border: none;
-    background: #1f7fc1;
+    background: var(--chat-blue);
     color: white;
     border-radius: 9px;
     font-size: 14px;
@@ -276,6 +366,11 @@ button:hover {
     background: #176a9f;
 }
 
+button:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
 .secondary-button {
     background: #6d7880;
 }
@@ -284,18 +379,60 @@ button:hover {
     background: #566169;
 }
 
+.input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.input-row input {
+    flex: 1;
+    min-width: 0;
+    margin: 0;
+}
+
 input {
     padding: 12px;
     width: 100%;
     border: 1px solid #b8c6cf;
-    border-radius: 9px;
+    border-radius: 22px;
     font-size: 16px;
-    margin-bottom: 8px;
+    background: white;
 }
 
 input:focus {
     outline: 2px solid rgba(31,127,193,0.25);
-    border-color: #1f7fc1;
+    border-color: var(--chat-blue);
+}
+
+.send-button {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+    margin: 0;
+    padding: 0;
+    border-radius: 50%;
+    background: var(--chat-blue);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 2px 6px rgba(31,127,193,0.28);
+}
+
+.send-button svg {
+    width: 21px;
+    height: 21px;
+    fill: white;
+}
+
+.restart-row {
+    margin-top: 8px;
+}
+
+@media (max-width: 700px) {
+    .trust-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 600px) {
@@ -322,7 +459,8 @@ input:focus {
 
     .chat-window {
         max-width: none;
-        height: 90vh;
+        height: 100dvh;
+        min-height: 100vh;
         border-radius: 0;
         box-shadow: none;
         border: none;
@@ -340,7 +478,14 @@ input:focus {
 
 <header>
     <div class="logo-row">
-        <div class="logo-icon">S</div>
+        <div class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 64 64" role="img">
+                <path fill="#2f6f96" d="M19 14h26l-2 8H21z"/>
+                <path fill="#24394a" d="M17 22h30l-3 29H20z"/>
+                <path fill="#e8f3f8" d="M24 28h16l-1.6 16H25.6z"/>
+                <path fill="#f2b84b" d="M45 8l2.2 5.2L52 15l-4.8 1.8L45 22l-2.2-5.2L38 15l4.8-1.8z"/>
+            </svg>
+        </div>
         <h1>Schoon en Zoon</h1>
     </div>
     <p>Betrouwbare schoonmaakdiensten voor woningen, kantoren en bedrijfspanden.</p>
@@ -356,9 +501,18 @@ input:focus {
     </section>
 
     <section class="card">
+        <div class="trust-row">
+            <div class="trust-item"><strong>15+</strong><span>jaar ervaring</span></div>
+            <div class="trust-item"><strong>250+</strong><span>tevreden klanten</span></div>
+            <div class="trust-item"><strong>VCA</strong><span>gecertificeerd</span></div>
+            <div class="trust-item"><strong>2009</strong><span>familiebedrijf sinds</span></div>
+        </div>
+    </section>
+
+    <section class="card">
         <h2>Onze diensten</h2>
         <ul class="service-list">
-            <li>Kantoor schoonmaak</li>
+            <li>Kantoorschoonmaak</li>
             <li>Glasbewassing</li>
             <li>Opleveringsschoonmaak</li>
             <li>Periodiek onderhoud</li>
@@ -384,15 +538,22 @@ input:focus {
     </section>
 </main>
 
-<div class="chat-button" onclick="openChat()"><span>💬</span> Service contact</div>
+<button class="chat-button" type="button" onclick="openChat()"><span>💬</span> Service contact</button>
 
 <section class="chat-page" id="chatPage">
     <div class="chat-window">
-        <div class="chat-header">
-            <div class="chat-header-icon">S</div>
-            <div>
-                <div class="chat-header-title">Schoon en Zoon Service</div>
-                <div class="chat-header-subtitle">Gemiddelde reactietijd: enkele seconden</div>
+        <div class="chat-header" id="chatHeader">
+            <div class="chat-header-icon" id="chatHeaderIcon" aria-hidden="true">
+                <svg viewBox="0 0 64 64">
+                    <path fill="#2f6f96" d="M19 14h26l-2 8H21z"/>
+                    <path fill="#24394a" d="M17 22h30l-3 29H20z"/>
+                    <path fill="#e8f3f8" d="M24 28h16l-1.6 16H25.6z"/>
+                    <path fill="#f2b84b" d="M45 8l2.2 5.2L52 15l-4.8 1.8L45 22l-2.2-5.2L38 15l4.8-1.8z"/>
+                </svg>
+            </div>
+            <div class="chat-header-copy">
+                <div class="chat-header-title" id="chatHeaderTitle">Schoon en Zoon</div>
+                <div class="chat-header-subtitle" id="chatHeaderSubtitle">Klantenservice</div>
             </div>
         </div>
         <div class="chat-box" id="chatBox"></div>
@@ -402,14 +563,74 @@ input:focus {
 
 <script>
 let botIsTyping = false;
+let botName = "Sanne - Klantenservice";
 
 function delay(ms) {
-    return new Promise(res => setTimeout(res, ms));
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function typeMessage(text, sender = "bot") {
+function setPublicIdentity() {
+    botName = "Sanne - Klantenservice";
+
+    const header = document.getElementById("chatHeader");
+    const icon = document.getElementById("chatHeaderIcon");
+    const chatBox = document.getElementById("chatBox");
+
+    document.getElementById("chatHeaderTitle").textContent = "Schoon en Zoon";
+    document.getElementById("chatHeaderSubtitle").textContent = "Klantenservice";
+
+    header.classList.remove("spider-mode", "header-switching");
+    chatBox.classList.remove("transition-dim");
+
+    icon.innerHTML = `
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+            <path fill="#2f6f96" d="M19 14h26l-2 8H21z"/>
+            <path fill="#24394a" d="M17 22h30l-3 29H20z"/>
+            <path fill="#e8f3f8" d="M24 28h16l-1.6 16H25.6z"/>
+            <path fill="#f2b84b" d="M45 8l2.2 5.2L52 15l-4.8 1.8L45 22l-2.2-5.2L38 15l4.8-1.8z"/>
+        </svg>`;
+}
+
+async function switchToSpiderTech() {
+    const header = document.getElementById("chatHeader");
+    const chatBox = document.getElementById("chatBox");
+
+    chatBox.classList.add("transition-dim");
+    header.classList.add("header-switching");
+    await delay(380);
+
+    botName = "SpiderTech";
+    document.getElementById("chatHeaderTitle").textContent = "SpiderTech";
+    document.getElementById("chatHeaderSubtitle").textContent = "Intern netwerk";
+    header.classList.add("spider-mode");
+
+    await delay(180);
+    header.classList.remove("header-switching");
+    chatBox.classList.remove("transition-dim");
+    await delay(350);
+}
+
+function scrollChatToBottom() {
+    const box = document.getElementById("chatBox");
+    box.scrollTop = box.scrollHeight;
+}
+
+function addAgentLabel() {
+    const box = document.getElementById("chatBox");
+    const label = document.createElement("div");
+    label.className = "agent-label";
+    label.textContent = botName;
+    box.appendChild(label);
+}
+
+async function typeMessage(text, sender = "bot", showAgent = true) {
     botIsTyping = true;
     const box = document.getElementById("chatBox");
+
+    if (sender === "bot" && showAgent) {
+        addAgentLabel();
+    }
+
     const msg = document.createElement("div");
     msg.className = "message " + sender;
     box.appendChild(msg);
@@ -417,7 +638,7 @@ async function typeMessage(text, sender = "bot") {
     for (let i = 0; i < text.length; i++) {
         msg.textContent += text[i];
         await delay(14);
-        box.scrollTop = box.scrollHeight;
+        scrollChatToBottom();
     }
 
     botIsTyping = false;
@@ -429,16 +650,16 @@ function addMessage(text, sender = "bot") {
     msg.className = "message " + sender;
     msg.textContent = text;
     box.appendChild(msg);
-    box.scrollTop = box.scrollHeight;
+    scrollChatToBottom();
 }
 
-function addSystemMessage(text) {
+function addSystemMessage(text, endMessage = false) {
     const box = document.getElementById("chatBox");
     const msg = document.createElement("div");
-    msg.className = "message system-end";
+    msg.className = endMessage ? "message system-end" : "message system-message";
     msg.textContent = text;
     box.appendChild(msg);
-    box.scrollTop = box.scrollHeight;
+    scrollChatToBottom();
 }
 
 function clearOptions() {
@@ -447,12 +668,26 @@ function clearOptions() {
 
 function addButton(text, action, extraClass = "") {
     const btn = document.createElement("button");
+    btn.type = "button";
     btn.textContent = text;
     if (extraClass) btn.className = extraClass;
     btn.onclick = () => {
         if (!botIsTyping) action();
     };
     document.getElementById("options").appendChild(btn);
+}
+
+function createSendButton(onSend, label) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "send-button";
+    button.setAttribute("aria-label", label);
+    button.innerHTML = `
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3.4 20.2 21 12 3.4 3.8 3 10.2l12 1.8-12 1.8.4 6.4Z"/>
+        </svg>`;
+    button.onclick = onSend;
+    return button;
 }
 
 function openChat() {
@@ -476,23 +711,51 @@ async function generalQuestion() {
     clearOptions();
     addMessage("Algemene vraag", "user");
     await delay(300);
-    await typeMessage("Oke, stel uw vraag en ik probeer zo goed mogelijk te helpen.");
+    await typeMessage("Oké, stel uw vraag en ik probeer zo goed mogelijk te helpen.");
 
     clearOptions();
+
+    const row = document.createElement("div");
+    row.className = "input-row";
+
     const input = document.createElement("input");
+    input.type = "text";
     input.placeholder = "Typ uw vraag...";
+    input.autocomplete = "off";
 
-    input.onkeydown = async function(e) {
-        if (e.key === "Enter" && input.value.trim() !== "" && !botIsTyping) {
-            addMessage(input.value, "user");
-            input.value = "";
-            await delay(300);
-            await typeMessage("Sorry, ik snap uw vraag niet.");
+    async function sendQuestion() {
+        const question = input.value.trim();
+        if (!question || botIsTyping) return;
+
+        input.value = "";
+        addMessage(question, "user");
+        await delay(300);
+        await typeMessage("Sorry, ik snap uw vraag niet.");
+        input.focus();
+    }
+
+    input.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            sendQuestion();
         }
-    };
+    });
 
-    document.getElementById("options").appendChild(input);
-    addButton("Opnieuw beginnen", resetChat, "secondary-button");
+    row.appendChild(input);
+    row.appendChild(createSendButton(sendQuestion, "Vraag verzenden"));
+    document.getElementById("options").appendChild(row);
+
+    const restartRow = document.createElement("div");
+    restartRow.className = "restart-row";
+    document.getElementById("options").appendChild(restartRow);
+
+    const restartButton = document.createElement("button");
+    restartButton.type = "button";
+    restartButton.className = "secondary-button";
+    restartButton.textContent = "Opnieuw beginnen";
+    restartButton.onclick = resetChat;
+    restartRow.appendChild(restartButton);
+
     input.focus();
 }
 
@@ -517,19 +780,34 @@ async function checkCustomer(code) {
         await typeMessage("Welkom. Voer uw 4-cijferige pincode in.");
 
         clearOptions();
+
+        const row = document.createElement("div");
+        row.className = "input-row";
+
         const input = document.createElement("input");
         input.placeholder = "Pincode...";
         input.type = "password";
         input.inputMode = "numeric";
+        input.pattern = "[0-9]*";
         input.maxLength = 4;
+        input.autocomplete = "off";
 
-        input.onkeydown = function(e) {
-            if (e.key === "Enter" && input.value.trim() !== "" && !botIsTyping) {
-                checkPin(input.value);
+        function sendPin() {
+            const pin = input.value.trim();
+            if (!pin || botIsTyping) return;
+            checkPin(pin);
+        }
+
+        input.addEventListener("keydown", event => {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                sendPin();
             }
-        };
+        });
 
-        document.getElementById("options").appendChild(input);
+        row.appendChild(input);
+        row.appendChild(createSendButton(sendPin, "Pincode verzenden"));
+        document.getElementById("options").appendChild(row);
         input.focus();
 
     } else {
@@ -548,8 +826,19 @@ async function checkPin(pin) {
     await delay(300);
 
     if (pin === "9874") {
-        await typeMessage("Welkom! Er is één bericht in uw inbox.");
-        await delay(300);
+        addSystemMessage("Authenticatie...");
+        await delay(650);
+        addSystemMessage("Verbinding maken met intern netwerk...");
+        await delay(700);
+        addSystemMessage("Beveiligingssleutel gecontroleerd...");
+        await delay(650);
+        addSystemMessage("Toegang verleend.");
+        await delay(450);
+
+        await switchToSpiderTech();
+
+        await typeMessage("Welkom. Er is één bericht in uw inbox.");
+        await delay(350);
 
         await typeMessage(`Ha,
 
@@ -557,11 +846,11 @@ Ik weet dat alles snel gaat, maar volgens mij zitten we op de goede weg. Het vir
 
 Ook de eerste testen om het virus te activeren zijn geslaagd. We gaan daarom verder met de verspreiding.
 
-We houden jullie nog meer op de hoogte met gecodeerde berichten, gebruik daarbij A = K.
+We houden jullie nog meer op de hoogte met gecodeerde berichten. Gebruik daarbij A = K.
 
 Project MK ULTRA.`);
 
-        addSystemMessage("— einde chat —");
+        addSystemMessage("— einde chat —", true);
 
         clearOptions();
         addButton("Nieuwe chat starten", resetChat, "secondary-button");
@@ -574,7 +863,9 @@ Project MK ULTRA.`);
 }
 
 function resetChat() {
+    setPublicIdentity();
     document.getElementById("chatBox").innerHTML = "";
+    clearOptions();
     startChat();
 }
 </script>
